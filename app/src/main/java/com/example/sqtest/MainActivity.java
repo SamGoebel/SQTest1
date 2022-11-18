@@ -1,22 +1,25 @@
 package com.example.sqtest;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
-import android.os.UserHandle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 //references to buttons and other controls on the layout
     Button btn_add, btn_viewAll;
     EditText et_name, et_age;
     CheckBox cb_activeUser;
-    RecyclerView rv_userList;
+    ListView lv_userList;
+    ArrayAdapter customerArrayAdapter;
+    DataBaseTest dataBaseTest;
 
 
 
@@ -32,11 +35,15 @@ public class MainActivity extends AppCompatActivity {
         et_age = findViewById(R.id.et_age);
         et_name = findViewById(R.id.et_name);
         cb_activeUser = findViewById(R.id.cb_active);
-        rv_userList = findViewById(R.id.rv_userList);
+        lv_userList = findViewById(R.id.lv_userList);
+
+        dataBaseTest = new DataBaseTest(MainActivity.this);
+
+        ShowUserOnListView(dataBaseTest);
 
         //button listeners for the add and view all buttons
         btn_add.setOnClickListener(new View.OnClickListener() {
-            @Override
+
             public void onClick(View v) {
 
                 CustomerModel userModel;
@@ -48,21 +55,39 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Error creating user", Toast.LENGTH_SHORT).show();
                     userModel = new CustomerModel(-1, "error", 0, false);
                 }
-                DataBaseTest dataBaseTest = new DataBaseTest(MainActivity.this);
 
                 boolean success = dataBaseTest.addOne(userModel);
 
                 Toast.makeText(MainActivity.this, "Success= " + success, Toast.LENGTH_SHORT).show();
+                ShowUserOnListView(dataBaseTest);
             }
         });
 
         btn_viewAll.setOnClickListener(new View.OnClickListener() {
-            @Override
+            DataBaseTest dataBaseTest = new DataBaseTest(MainActivity.this);
+
+
             public void onClick(View v){
-                Toast.makeText(MainActivity.this, "View All button", Toast.LENGTH_SHORT).show();
+                ShowUserOnListView(dataBaseTest);
+
+                //Toast.makeText(MainActivity.this, everyone.toString(), Toast.LENGTH_SHORT).show();
+           }
+        });
+        lv_userList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                CustomerModel clickedUser = (CustomerModel) parent.getItemAtPosition(position);
+            dataBaseTest.deleteOne(clickedUser);
+            ShowUserOnListView(dataBaseTest);
+            Toast.makeText(MainActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
             }
         });
 
 
+    }
+
+    private void ShowUserOnListView(DataBaseTest dataBaseTest1) {
+        customerArrayAdapter = new ArrayAdapter<CustomerModel>(MainActivity.this, android.R.layout.simple_list_item_1, this.dataBaseTest.getEveryone());
+        lv_userList.setAdapter(customerArrayAdapter);
     }
 }
