@@ -74,7 +74,7 @@ public class Sticky {
 	}
 	
 	
-	// edit: while isEditing is true, open editor and tinker with stuph, when false make changes and close editor (requires an editor class?)
+	// edit: while isEditing is true, open editor and tinker with stuff, when false make changes and close editor (requires an editor class?)
 	
 	// trigger alarm
 	

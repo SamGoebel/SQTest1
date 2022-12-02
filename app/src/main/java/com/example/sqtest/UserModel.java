@@ -1,6 +1,6 @@
 package com.example.sqtest;
 
-public class CustomerModel {
+public class UserModel {
     private int id;
     private String name;
     private int age;
@@ -8,24 +8,19 @@ public class CustomerModel {
 
     // constructors
 
-    public CustomerModel(int id, String name, int age, boolean isActive) {
+    public UserModel(int id, String name, int age, boolean isActive) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.isActive = isActive;
     }
 
-    public CustomerModel() {
+    public UserModel() {
     }
 
     @Override
     public String toString() {
-        return "CustomerModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", isActive=" + isActive +
-                '}';
+        return "    " + name;
     }
 
     // getters and setters
